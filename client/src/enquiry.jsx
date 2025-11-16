@@ -44,8 +44,17 @@ export default function Enquiry() {
           getAllEnquiries();
         })
         .catch((err) => {
-          console.log(err);
-          alert("Error updating enquiry");
+          console.log("Error updating enquiry:", err);
+          if (err.response) {
+            // Server responded with error status
+            toast.error(`Update failed: ${err.response.data.message || err.response.statusText}`);
+          } else if (err.request) {
+            // Request was made but no response received
+            toast.error("Update failed: No response from server. Check if backend is running.");
+          } else {
+            // Something else happened
+            toast.error(`Update failed: ${err.message}`);
+          }
         });
     } else {
       // Create new enquiry
@@ -66,8 +75,17 @@ export default function Enquiry() {
           getAllEnquiries();
         })
         .catch((err) => {
-          console.log(err);
-          alert("Error saving enquiry");
+          console.log("Error saving enquiry:", err);
+          if (err.response) {
+            // Server responded with error status
+            toast.error(`Save failed: ${err.response.data.message || err.response.statusText}`);
+          } else if (err.request) {
+            // Request was made but no response received
+            toast.error("Save failed: No response from server. Check if backend is running and URL is correct.");
+          } else {
+            // Something else happened
+            toast.error(`Save failed: ${err.message}`);
+          }
         });
     }
   };
@@ -82,6 +100,13 @@ export default function Enquiry() {
     }
   } catch (err) {
     console.log("Error fetching enquiries:", err);
+    if (err.response) {
+      toast.error(`Failed to fetch enquiries: ${err.response.data.message || err.response.statusText}`);
+    } else if (err.request) {
+      toast.error("Failed to fetch enquiries: No response from server. Check if backend is running.");
+    } else {
+      toast.error(`Failed to fetch enquiries: ${err.message}`);
+    }
   }
 };
 
@@ -98,7 +123,13 @@ export default function Enquiry() {
       }
     } catch (err) {
       console.log("Error deleting enquiry:", err);
-      toast.error("Error deleting enquiry");
+      if (err.response) {
+        toast.error(`Delete failed: ${err.response.data.message || err.response.statusText}`);
+      } else if (err.request) {
+        toast.error("Delete failed: No response from server. Check if backend is running.");
+      } else {
+        toast.error(`Delete failed: ${err.message}`);
+      }
     }
   };
 
