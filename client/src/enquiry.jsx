@@ -5,6 +5,9 @@ import "./index.css";
 import EnquiryList from "./enquiry/EnquiryList";
 import axios from "axios";
 
+// Use environment variable for API URL or default to localhost
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8001";
+
 export default function Enquiry() {
   let [enquiryList, setEnquiryList] = useState([]);
   let [formdata, setFormdata] = useState({
@@ -23,7 +26,7 @@ export default function Enquiry() {
     if (editMode) {
       // Update existing enquiry
       axios
-        .put(`http://localhost:8001/api/website/enquiries/update/${currentEditId}`, formdata)
+        .put(`${API_BASE_URL}/api/website/enquiries/update/${currentEditId}`, formdata)
         .then((res) => {
           console.log(res);
           toast.success("Enquiry updated successfully");
@@ -47,7 +50,7 @@ export default function Enquiry() {
     } else {
       // Create new enquiry
       axios
-        .post("http://localhost:8001/api/website/enquiries/insert",formdata )
+        .post(`${API_BASE_URL}/api/website/enquiries/insert`,formdata )
         .then((res) => {
           console.log(res);
           toast.success("Enquiry saved successfully");
@@ -71,7 +74,7 @@ export default function Enquiry() {
 
   let getAllEnquiries = async () => {
   try {
-    const res = await axios.get("http://localhost:8001/api/website/enquiries/list");
+    const res = await axios.get(`${API_BASE_URL}/api/website/enquiries/list`);
     console.log("Fetched Enquiries:", res.data);
 
     if (res.data.status === 1) {
@@ -84,7 +87,7 @@ export default function Enquiry() {
 
   let deleteEnquiry = async (id) => {
     try {
-      const res = await axios.delete(`http://localhost:8001/api/website/enquiries/delete/${id}`);
+      const res = await axios.delete(`${API_BASE_URL}/api/website/enquiries/delete/${id}`);
       
       if (res.data.status === 1) {
         toast.success("Enquiry deleted successfully");
